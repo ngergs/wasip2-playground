@@ -1,0 +1,14 @@
+package local:math;
+
+world math{
+    /// Just as an example how to use structs
+    record arguments {
+      x: s32,
+      y: s32
+    }
+
+    export sum: func(args: arguments) -> s32;
+    export minus: func(args: arguments) -> s32;
+    export mul: func(args: arguments) -> s32;
+    export div: func(args: arguments) -> result<f32,string>;
+}

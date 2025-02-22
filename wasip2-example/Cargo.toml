@@ -1,0 +1,17 @@
+[package]
+name = "wasip2-example"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wit-bindgen = "0.39.0"
+
+[profile.release]
+# https://github.com/johnthagen/min-sized-rust
+strip = true
+lto = true
+codegen-units = 1

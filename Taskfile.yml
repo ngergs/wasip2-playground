@@ -1,0 +1,20 @@
+version: '3'
+
+tasks:
+  build:
+    vars:
+      DIR: '{{ default .USER_WORKING_DIR .DIR }}'
+    dir: '{{ .DIR }}'
+    cmds:
+      - cargo build --profile release --target wasm32-wasip2
+  fmt-cargo:
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - taplo format Cargo.toml
+  run:
+    deps:
+      - task: build
+        vars: { DIR: wasip2-example }
+    dir: wasmtime-run
+    cmds:
+      - cargo run
