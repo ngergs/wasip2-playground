@@ -15,3 +15,5 @@ wit-bindgen = "0.39.0"
 strip = true
 lto = true
 codegen-units = 1
+# needed to not include a lot of unneeded wit imports, see https://github.com/rust-lang/rust/issues/133235
+panic = "abort"

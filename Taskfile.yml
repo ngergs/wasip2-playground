@@ -1,20 +1,35 @@
 version: '3'
 
+includes:
+  wasip2-example:
+    taskfile: wasip2-example/Taskfile.yml
+    dir: wasip2-example
+
+
 tasks:
   build:
+    desc: Build the rspective rust project
     vars:
       DIR: '{{ default .USER_WORKING_DIR .DIR }}'
     dir: '{{ .DIR }}'
     cmds:
-      - cargo build --profile release --target wasm32-wasip2
-  fmt-cargo:
-    dir: '{{.USER_WORKING_DIR}}'
-    cmds:
-      - taplo format Cargo.toml
-  run:
+      - cargo build --release --target wasm32-wasip2
+  print-wit:
+    desc: Prints the wit file embedded into the wasip2-example output wasm file
     deps:
-      - task: build
-        vars: { DIR: wasip2-example }
+      - task: wasip2-example:build
+    dir: wasip2-example/target/wasm32-wasip2/release
+    cmds:
+      - wasm-tools component wit wasip2_example.wasm
+  run:
+    desc: Runs the `wasmtime-run` host runtime which embedds the `wasip2-example` guest
+    deps:
+      - task: wasip2-example:build
     dir: wasmtime-run
     cmds:
       - cargo run
+  fmt-cargo:
+    desc: Format a Cargo.toml
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - taplo format Cargo.toml

@@ -1,7 +1,7 @@
 use anyhow::Result;
 use wasmtime::component::{bindgen, Component, Linker, ResourceTable};
 use wasmtime::{Config, Engine, Store};
-use wasmtime_wasi::{IoView, WasiCtx, WasiCtxBuilder, WasiView};
+use wasmtime_wasi::{IoView, WasiCtx, WasiCtxBuilder, WasiImpl, WasiView};
 
 bindgen!({
     path:"../math.wit",
@@ -21,14 +21,26 @@ fn main() -> Result<()> {
             table: ResourceTable::new(),
         },
     );
-    let mut linker = Linker::new(&engine);
-    wasmtime_wasi::add_to_linker_sync(&mut linker)?;
+    let linker = Linker::new(&engine);
+    // not needed for our example but shows how to explicitly add certain capabilities to the linker
+    // let closure = type_annotate::<MyState, _>(|t| WasiImpl(IoImpl(t)));
+    // wasmtime_wasi::bindings::sync::cli::environment::add_to_linker_get_host(&mut linker, closure)?;
+    // alternative, contains potentially dangerous things like creating sockets
+    // wasmtime_wasi::add_to_linker_sync(&mut linker)?;
     let instance = Math::instantiate(&mut store, &component, &linker)?;
     let result = instance.call_div(&mut store, Arguments { x: 2, y: 3 })?;
     println!("{result:?}");
     let result = instance.call_div(&mut store, Arguments { x: 2, y: 0 })?;
     println!("{result:?}");
     Ok(())
+}
+
+#[allow(dead_code)] // for some of the commented out examples above
+fn type_annotate<T: WasiView, F>(val: F) -> F
+where
+    F: Fn(&mut T) -> WasiImpl<&mut T>,
+{
+    val
 }
 
 // see https://docs.wasmtime.dev/api/wasmtime_wasi/fn.add_to_linker_sync.html

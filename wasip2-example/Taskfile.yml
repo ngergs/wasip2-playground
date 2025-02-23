@@ -1,0 +1,10 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Build the respective rust project
+    # needed to not include a lot of unneeded wit imports, see https://github.com/rust-lang/rust/issues/133235 and https://github.com/johnthagen/min-sized-rust
+    cmds:
+      - cargo +nightly build -Zbuild-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort --release --target wasm32-wasip2
+    env:
+      RUSTFLAGS: "-Zlocation-detail=none -Zfmt-debug=none"
