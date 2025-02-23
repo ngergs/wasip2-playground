@@ -23,6 +23,7 @@ fn main() -> Result<()> {
     );
     let linker = Linker::new(&engine);
     // not needed for our example but shows how to explicitly add certain capabilities to the linker
+    // see implementation of wasmtime_wasi::add_to_linker_sync
     // let closure = type_annotate::<MyState, _>(|t| WasiImpl(IoImpl(t)));
     // wasmtime_wasi::bindings::sync::cli::environment::add_to_linker_get_host(&mut linker, closure)?;
     // alternative, contains potentially dangerous things like creating sockets
