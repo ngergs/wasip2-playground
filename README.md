@@ -18,7 +18,6 @@ This is already setup via the Taskfile.
 ### Default compilation
 
 ```bash
-```bash
 rustup target add wasm32-wasip2
 task run
 ```
