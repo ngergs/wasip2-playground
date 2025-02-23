@@ -1,5 +1,10 @@
 version: '3'
 
+vars:
+  # builds a minimalized `wasip2-example` guest module by disabling panic formatting
+  # requires the nightly rust toolchain
+  MINIMAL_WASM: '{{ default .MINIMAL_WASM false }}'
+
 includes:
   wasip2-example:
     taskfile: wasip2-example/Taskfile.yml
