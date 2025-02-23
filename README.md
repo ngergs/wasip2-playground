@@ -51,13 +51,15 @@ world root {
   export mul: func(args: arguments) -> s32;
   export div: func(args: arguments) -> result<f32, string>;
 }
+
+[...] # omitted included wasi imports
 ```
 
 The origin for these includes is [rust panic formatting](https://github.com/rust-lang/rust/issues/133235).
 
 ### Without panic formatting
 
-We can use the `nightly` rust toolchain to ommit panic formatting for the guest component:
+We can use the `nightly` rust toolchain to omit panic formatting for the guest component:
 
 ```bash
 rustup toolchain install nightly
